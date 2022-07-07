@@ -5,12 +5,12 @@ JSON_WHITESPACE = [' ', '\t', '\b', '\n', '\r']
 JSON_SYNTAX = [JSON_COMMA, JSON_COLON, JSON_LEFTBRACKET, JSON_RIGHTBRACKET,
                JSON_LEFTBRACE, JSON_RIGHTBRACE]
 
-FALSE_LEN = len('false')
-TRUE_LEN = len('true')
-NULL_LEN = len('null')
+LEN_FALSE = len('false')
+LEN_TRUE = len('true')
+LEN_NULL = len('null')
 
 
-def lex_string(string):
+def lexical_string(string):
     json_string = ''
 
     if string[0] == JSON_QUOTE:
@@ -20,14 +20,14 @@ def lex_string(string):
 
     for c in string:
         if c == JSON_QUOTE:
-            return json_string, string[len(json_string)+1:]
+            return json_string, string[len(json_string) + 1:]
         else:
             json_string += c
 
     raise Exception('Expected end-of-string quote')
 
 
-def lex_number(string):
+def lexical_number(string):
     json_number = ''
 
     number_characters = [str(d) for d in range(0, 10)] + ['-', 'e', '.']
@@ -49,49 +49,49 @@ def lex_number(string):
     return int(json_number), rest
 
 
-def lex_bool(string):
+def lexical_bool(string):
     string_len = len(string)
 
-    if string_len >= TRUE_LEN and \
-         string[:TRUE_LEN] == 'true':
-        return True, string[TRUE_LEN:]
-    elif string_len >= FALSE_LEN and \
-         string[:FALSE_LEN] == 'false':
-        return False, string[FALSE_LEN:]
+    if string_len >= LEN_TRUE and \
+            string[:LEN_TRUE] == 'true':
+        return True, string[LEN_TRUE:]
+    elif string_len >= LEN_FALSE and \
+            string[:LEN_FALSE] == 'false':
+        return False, string[LEN_FALSE:]
 
     return None, string
 
 
-def lex_null(string):
+def lexical_null(string):
     string_len = len(string)
 
-    if string_len >= NULL_LEN and \
-         string[:NULL_LEN] == 'null':
-        return True, string[NULL_LEN]
+    if string_len >= LEN_NULL and \
+            string[:LEN_NULL] == 'null':
+        return True, string[LEN_NULL]
 
     return None, string
 
 
-def lex(string):
+def lexical(string):
     tokens = []
 
     while len(string):
-        json_string, string = lex_string(string)
+        json_string, string = lexical_string(string)
         if json_string is not None:
             tokens.append(json_string)
             continue
 
-        json_number, string = lex_number(string)
+        json_number, string = lexical_number(string)
         if json_number is not None:
             tokens.append(json_number)
             continue
 
-        json_bool, string = lex_bool(string)
+        json_bool, string = lexical_bool(string)
         if json_bool is not None:
             tokens.append(json_bool)
             continue
 
-        json_null, string = lex_null(string)
+        json_null, string = lexical_null(string)
         if json_null is not None:
             tokens.append(None)
             continue

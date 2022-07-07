@@ -1,30 +1,23 @@
-# pj
+# pserial
 
-This is a small, hand-written library for encoding and decoding JSON
-strings and objects in Python. I wrote it because I wanted a small
-example to demonstrate the simplest hand-written parser techniques
-and couldn't find any obvious results on Google.
-
-[Here](http://notes.eatonphil.com/writing-a-simple-json-parser.html)
-is the original blog post explaining the concepts and implementation
-of this library.
+This is a small, hand-written library for serializing and deserializing a dictionary in Python.
 
 ### Use
 
 ```python
-import pj
+import pserial
+dictionary = {
+  "id": 1,
+  "first_name": "Jeanette",
+  "last_name": "Penddreth",
+  "email": "jpenddreth0@census.gov",
+  "gender": "Female",
+  "ip_address": "26.58.193.2"
+}
+# to serialise
+pserial.serialize(dictionary)
+# serialised dictionary stored in file
 
-print(pj.to_string(pj.from_string('{"foo":{"bar":[1,2,3]}}')))
+pserial.deserialize()
+# returns the deserialized dictionary from the file
 ```
-
-### Tests
-
-```bash
-python3 -m unittest
-```
-
-### Quality
-
-The number detection is bad. There are tons of missing cases not
-handled. There is no line/column tracking. The primary purpose of this
-library is for education.
